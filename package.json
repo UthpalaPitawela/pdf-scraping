@@ -1,0 +1,27 @@
+{
+  "name": "web-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "dependencies": {
+    "@sparticuz/chromium": "^109.0.5",
+    "aws-sdk": "^2.1635.0",
+    "needle": "^3.3.1",
+    "pdf-parse": "^1.1.1",
+    "playwright": "^1.44.1",
+    "playwright-core": "^1.44.1",
+    "puppeteer-core": "^21.5.0",
+    "selenium-webdriver": "^4.1.0"
+  },
+  "devDependencies": {
+    "@sparticuz/chromium-min": "^119.0.2",
+    "puppeteer": "^21.5.0",
+    "serverless-offline": "^8.0.0"
+  },
+  "module": "true",
+  "scripts": {
+    "start": "serverless offline"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,26 @@
+service: web-scraper
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+      Resource: arn:aws:logs:*:*:*
+
+functions:
+  scrape:
+    handler: handler.handler
+    events:
+      - http:
+          path: scrape
+          method: post
+    timeout: 30
+    memorySize: 1024
+
+plugins:
+  - serverless-offline
