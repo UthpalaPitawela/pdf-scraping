@@ -40,15 +40,19 @@ exports.handler = async () => {
   // Use the 'pdf-parse' module to extract the text from the PDF file
   const dataBuffer = fs.readFileSync("./ExportData/Consular-Guidlines-New.pdf");
 
-  // const response = await addPdfExtractToS3(arrayBuffer);
-  // console.log('response', response);
-  // if (response.ok) {
-  //   const text = await response.text();
-  //   console.log("text", text);
-  // } else {
-  //   const error = await response.json();
-  //   console.log("error", error);
-  // }
+  //add stream to form data
+  //Here url should be S3 pre signed url
+  const bodyFormData = new FormData();
+  bodyFormData.append('pdfExtract', dataBuffer); 
+  const response = await putToS3("url",bodyFormData);
+  console.log('response', response);
+  if (response.ok) {
+    const text = await response.text();
+    console.log("text", text);
+  } else {
+    const error = await response.json();
+    console.log("error", error);
+  }
 
   // Download the pdf as a text file
   await pdf(dataBuffer).then(function (data) {
@@ -58,3 +62,24 @@ exports.handler = async () => {
   await page.waitForTimeout(10000);
   await browser.close();
 };
+
+// The below endpoints related to add data to s3 via pre signed url. 
+// Here url should be the one which can retrieve the S3 pre signed url
+const getPreSignedUrl = async () => {
+  return await fetch('url' , {
+      method: "POST",
+      body: {
+          "uploadType": "DOCUMENT",
+          "mimeType": "application/pdf"
+      }
+  });
+}
+
+//The below code related to add data to the s3 bucket using a presigned url
+const putToS3 = async (url, data) => {
+  return  await  fetch(url, {method: "PUT", body: data, headers: {
+      'Content-Type': 'application/pdf'
+  }});
+
+}
+
